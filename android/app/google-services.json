@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "699608939907",
+    "project_id": "noovotravel",
+    "storage_bucket": "noovotravel.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:699608939907:android:95880fcae72c9df6c94ab6",
+        "android_client_info": {
+          "package_name": "com.example.noovo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBid4ZvM4j-iD8NOtdjKrd0h347HsCf2Vw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:699608939907:android:e0d463d5df527820c94ab6",
+        "android_client_info": {
+          "package_name": "com.example.todo_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBid4ZvM4j-iD8NOtdjKrd0h347HsCf2Vw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,43 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/App_theme/app_theme.dart';
+import 'package:todo_app/UiComponets/text_theme.dart';
+import 'package:todo_app/provider/auth_provider.dart';
+import 'package:todo_app/provider/theme_provider.dart';
+import 'package:todo_app/splash_Screen.dart';
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProviderPage()..checkUser),
+        ChangeNotifierProvider(create: (context) => ThemeProvider(),)
+      ],
+      child: MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+    return MaterialApp(
+      title: "TO-Do-App",
+      debugShowCheckedModeBanner: false,
+      home: SplashScreen(),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeProvider.themeMode,
+
+    );
+  }
+}

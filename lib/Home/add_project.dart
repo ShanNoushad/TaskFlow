@@ -191,6 +191,7 @@ class _AddProjectState extends State<AddProject> {
               child: ElevatedButton(
                 onPressed: isLoading ? null : saveProject,
                 style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
                   backgroundColor: colorScheme.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14),

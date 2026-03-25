@@ -13,7 +13,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController emailController = TextEditingController();
@@ -27,6 +26,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final auth = context.read<AuthProviderPage>();
 
+    setState(() => isLoading = true);
+
     try {
       await auth.loginWithApproval(
         email: emailController.text.trim(),
@@ -36,9 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (auth.user != null) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (_) => HomeMain(),
-          ),
+          MaterialPageRoute(builder: (_) => HomeMain()),
         );
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -49,8 +48,11 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString())),
       );
+    } finally {
+      setState(() => isLoading = false);
     }
   }
+
   @override
   void dispose() {
     emailController.dispose();
@@ -60,8 +62,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor:Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
@@ -78,22 +82,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: GoogleFonts.poppins(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onBackground,
                   ),
                 ),
+
                 const SizedBox(height: 8),
 
                 Text(
                   "Login to continue",
                   style: GoogleFonts.poppins(
                     fontSize: 16,
-                    color: Colors.grey,
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
 
                 const SizedBox(height: 40),
 
-                // 🔹 EMAIL FIELD
+                /// EMAIL
                 _buildTextFormField(
+                  context: context,
                   controller: emailController,
                   label: "Email",
                   icon: Icons.email_outlined,
@@ -111,8 +118,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 20),
 
-                // 🔹 PASSWORD FIELD
+                /// PASSWORD
                 _buildTextFormField(
+                  context: context,
                   controller: passwordController,
                   label: "Password",
                   icon: Icons.lock_outline,
@@ -136,25 +144,28 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 30),
 
+                /// LOGIN BUTTON
                 SizedBox(
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
                     onPressed: isLoading ? null : signInUser,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple,
+                      backgroundColor: theme.colorScheme.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                     child: isLoading
-                        ? const CircularProgressIndicator(color: Colors.white)
+                        ? const CircularProgressIndicator(
+                      color: Colors.white,
+                    )
                         : Text(
                       "Login",
                       style: GoogleFonts.poppins(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: theme.colorScheme.onPrimary,
                       ),
                     ),
                   ),
@@ -162,11 +173,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 16),
 
+                /// FORGOT PASSWORD
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {},
-                    child: const Text("Forgot Password?"),
+                    child: Text(
+                      "Forgot Password?",
+                      style: TextStyle(
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
                   ),
                 ),
 
@@ -185,10 +202,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 20),
 
+                /// SIGN UP
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Don't have an account?"),
+                    Text(
+                      "Don't have an account?",
+                      style: TextStyle(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
                     TextButton(
                       onPressed: () {
                         Navigator.push(
@@ -196,7 +219,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           MaterialPageRoute(builder: (_) => const SignUp()),
                         );
                       },
-                      child: const Text("Sign Up"),
+                      child: Text(
+                        "Sign Up",
+                        style: TextStyle(
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -209,7 +237,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
+/// ✅ TEXT FIELD WIDGET
 Widget _buildTextFormField({
+  required BuildContext context,
   required TextEditingController controller,
   required String label,
   required IconData icon,
@@ -218,23 +248,35 @@ Widget _buildTextFormField({
   bool obscureText = false,
   VoidCallback? togglePassword,
 }) {
+  final theme = Theme.of(context);
+
   return TextFormField(
     controller: controller,
     obscureText: obscureText,
     validator: validator,
+    style: TextStyle(color: theme.colorScheme.onSurface),
     decoration: InputDecoration(
       labelText: label,
-      prefixIcon: Icon(icon),
+      labelStyle: TextStyle(
+        color: theme.colorScheme.onSurfaceVariant,
+      ),
+      prefixIcon: Icon(
+        icon,
+        color: theme.colorScheme.primary,
+      ),
       suffixIcon: isPassword
           ? IconButton(
         icon: Icon(
-          obscureText ? Icons.visibility_off : Icons.visibility,
+          obscureText
+              ? Icons.visibility_off
+              : Icons.visibility,
+          color: theme.colorScheme.onSurfaceVariant,
         ),
         onPressed: togglePassword,
       )
           : null,
       filled: true,
-      fillColor: Colors.white,
+      fillColor: theme.colorScheme.surfaceVariant,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide.none,

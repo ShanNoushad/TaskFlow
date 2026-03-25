@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_app/Service/authservice.dart';
 import 'package:todo_app/auth/login.dart';
 import 'package:todo_app/Home/home_main.dart';
 import 'package:todo_app/provider/auth_provider.dart';
-
-import '../App_theme/app_theme.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -21,16 +18,14 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final authProvider = Provider.of<AuthProviderPage>(context);
-    final auth = Provider.of<AuthProviderPage>(context);
-    final userId = auth.user?.uid;
 
     return Scaffold(
-      backgroundColor:Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
@@ -46,17 +41,24 @@ class _SignUpState extends State<SignUp> {
                   style: GoogleFonts.poppins(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onBackground,
                   ),
                 ),
+
                 const SizedBox(height: 8),
+
                 Text(
                   "Sign up to get started",
-                  style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey),
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                 ),
 
                 const SizedBox(height: 40),
 
                 _buildTextFormField(
+                  context: context,
                   controller: nameController,
                   label: "Username",
                   icon: Icons.person_outline,
@@ -65,6 +67,7 @@ class _SignUpState extends State<SignUp> {
                 const SizedBox(height: 20),
 
                 _buildTextFormField(
+                  context: context,
                   controller: emailController,
                   label: "Email",
                   icon: Icons.email_outlined,
@@ -73,6 +76,7 @@ class _SignUpState extends State<SignUp> {
                 const SizedBox(height: 20),
 
                 _buildTextFormField(
+                  context: context,
                   controller: passwordController,
                   label: "Password",
                   icon: Icons.lock_outline,
@@ -81,6 +85,7 @@ class _SignUpState extends State<SignUp> {
 
                 const SizedBox(height: 30),
 
+                /// SIGN UP BUTTON
                 SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -88,45 +93,53 @@ class _SignUpState extends State<SignUp> {
                     onPressed: authProvider.isLoading
                         ? null
                         : () async {
-                            if (!_formKey.currentState!.validate()) return;
+                      if (!_formKey.currentState!.validate()) return;
 
-                            try {
-                              await authProvider.signUp(
-                                nameController.text.trim(),
-                                emailController.text.trim(),
-                                passwordController.text.trim(),
-                              );
+                      try {
+                        await authProvider.signUp(
+                          nameController.text.trim(),
+                          emailController.text.trim(),
+                          passwordController.text.trim(),
+                        );
 
-                              if (authProvider.user != null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Signup Successful"),
-                                  ),
-                                );
+                        if (authProvider.user != null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Signup Successful"),
+                            ),
+                          );
 
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => HomeMain(),
-                                  ),
-                                );
-                              }
-                            } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(e.toString())),
-                              );
-                            }
-                          },
-                     child: authProvider.isLoading
-                  ? const CircularProgressIndicator(color: Colors.white)
-                      : Text(
-                  "Sign Up",
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const HomeMain(),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(e.toString())),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: theme.colorScheme.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: authProvider.isLoading
+                        ? const CircularProgressIndicator(
+                      color: Colors.white,
+                    )
+                        : Text(
+                      "Sign Up",
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onPrimary,
+                      ),
+                    ),
                   ),
                 ),
 
@@ -145,23 +158,31 @@ class _SignUpState extends State<SignUp> {
 
                 const SizedBox(height: 20),
 
+                /// SIGN IN NAVIGATION
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Already have an account?"),
+                    Text(
+                      "Already have an account?",
+                      style: TextStyle(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
                     TextButton(
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Theme(
-                              data: AppTheme.lightTheme,
-                              child: LoginScreen(),
-                            ),
+                            builder: (_) => const LoginScreen(),
                           ),
                         );
                       },
-                      child: const Text("Sign In"),
+                      child: Text(
+                        "Sign In",
+                        style: TextStyle(
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -174,13 +195,16 @@ class _SignUpState extends State<SignUp> {
   }
 }
 
-// ---------------- INPUT FIELD ----------------
+/// 🔥 DARK MODE FRIENDLY INPUT
 Widget _buildTextFormField({
+  required BuildContext context,
   required TextEditingController controller,
   required String label,
   required IconData icon,
   bool isPassword = false,
 }) {
+  final theme = Theme.of(context);
+
   return TextFormField(
     controller: controller,
     obscureText: isPassword,
@@ -196,11 +220,18 @@ Widget _buildTextFormField({
       }
       return null;
     },
+    style: TextStyle(color: theme.colorScheme.onSurface),
     decoration: InputDecoration(
       labelText: label,
-      prefixIcon: Icon(icon),
+      labelStyle: TextStyle(
+        color: theme.colorScheme.onSurfaceVariant,
+      ),
+      prefixIcon: Icon(
+        icon,
+        color: theme.colorScheme.primary,
+      ),
       filled: true,
-      fillColor: Colors.white,
+      fillColor: theme.colorScheme.surfaceVariant,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide.none,

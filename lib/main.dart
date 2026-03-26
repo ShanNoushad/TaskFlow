@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/App_theme/app_theme.dart';
-import 'package:todo_app/UiComponets/text_theme.dart';
 import 'package:todo_app/provider/auth_provider.dart';
+import 'package:todo_app/provider/notes_provider.dart';
 import 'package:todo_app/provider/theme_provider.dart';
 import 'package:todo_app/splash_Screen.dart';
 import 'firebase_options.dart';
@@ -16,7 +16,8 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProviderPage()..checkUser),
-        ChangeNotifierProvider(create: (context) => ThemeProvider(),)
+        ChangeNotifierProvider(create: (context) => ThemeProvider(),),
+        ChangeNotifierProvider(create: (context) => NoteProvider(),)
       ],
       child: MyApp(),
     ),

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/Home/settings.dart';
-import 'package:todo_app/Service/local_status.dart';
 import 'package:todo_app/Service/pojectService.dart';
 import '../Models/auth_model.dart';
 import '../Service/authservice.dart';
-import '../auth/login.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -58,8 +56,8 @@ class _ProfileState extends State<Profile> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      // ✅ removed hardcoded Colors.white
       appBar: AppBar(
+        centerTitle: true,
         title: const Text("Profile"),
         actions: [
           IconButton(
@@ -67,7 +65,7 @@ class _ProfileState extends State<Profile> {
               context,
               MaterialPageRoute(builder: (_) => SettingsScreen()),
             ),
-            icon: const Icon(Icons.settings),  // ✅ color from iconTheme
+            icon: const Icon(Icons.settings), 
           ),
         ],
       ),
@@ -84,7 +82,6 @@ class _ProfileState extends State<Profile> {
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          // ── Avatar ───────────────────────────────────────
           Container(
             decoration: const BoxDecoration(
               shape: BoxShape.circle,

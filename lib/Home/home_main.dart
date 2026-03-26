@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/Home/notes/notes_list.dart';
 import 'package:todo_app/Home/profile.dart';
 import 'package:todo_app/Home/todays_task.dart';
-import 'add_project.dart';
-import 'home_screen.dart';
+import 'package:todo_app/Home/home_screen.dart';
 
 class HomeMain extends StatefulWidget {
   const HomeMain({super.key});
@@ -17,6 +17,7 @@ class _HomeMainState extends State<HomeMain> {
   final List<Widget> _screens = [
     HomeScreen(),
     TodayTask(),
+    NotesPage(),
     Profile(),
   ];
 
@@ -37,6 +38,7 @@ class _HomeMainState extends State<HomeMain> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.date_range), label: 'Today'),
+          BottomNavigationBarItem(icon: Icon(Icons.note), label: 'Notes'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
